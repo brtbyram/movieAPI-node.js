@@ -8,6 +8,7 @@ const dotenv = require("dotenv");
 
 const indexRouter = require("./routes/index");
 const movieRouter = require("./routes/movieRoutes");
+const directorRouter = require("./routes/directorRoutes");
 
 dotenv.config();
 const app = express();
@@ -34,6 +35,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/api/movies", movieRouter);
+app.use("/api/directors", directorRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
