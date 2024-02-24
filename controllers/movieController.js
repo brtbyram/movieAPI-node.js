@@ -14,7 +14,17 @@ const postMovie = async (req, res) => {
 };
 
 const getMovies = async (req, res) => {
-  const movies = await MovieModel.find({});
+  const movies = await MovieModel.aggregate([
+    {
+      $lookup: {
+        from: "directors", // hangi collection'dan alınacak
+        localField: "director_id", // hangi field ile eşleşecek
+        foreignField: "_id", // eşleşecek field hangisi
+        as: "director", // eşleşen field'ı hangi field'a atayacak
+      },
+    },
+  ]);
+
   try {
     res.status(200).json(movies);
   } catch (error) {
