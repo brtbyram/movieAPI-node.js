@@ -22,10 +22,16 @@ mongoose.connection.on("error", (err) => {
   console.log("Error connecting to MongoDB", err);
 });
 
+// Config
+const config = require("./config");
+app.set("api_secret_key", config.api_secret_key);
+
+// Middleware
+const verifyToken = require("./middleware/verify-token"); // token kontrolü yapılır
+
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
-
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -33,7 +39,9 @@ app.use(express.urlencoded({ extended: true })); // false ise sadece string ve a
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+// Routes
 app.use("/", indexRouter);
+app.use("/api", verifyToken); // token kontrolü yapılır
 app.use("/api/movies", movieRouter);
 app.use("/api/directors", directorRouter);
 
